@@ -7,7 +7,7 @@ const sidebar_menu = [
     {
         id: 1,
         icon: DashboardIcon,
-        path: '/?t=1',
+        path: '/Dashboard?t=1',
         title: 'Dashboard',
         trust: 1,
     },
@@ -30,6 +30,13 @@ const sidebar_menu = [
         icon: UserIcon,
         path: '/profile?t=1',
         title: 'My account',
+        trust: 1,
+    },
+    {
+        id: 5,
+        icon: Bookings,
+        path: '/BookingList?t=1',
+        title: 'Booking List',
         trust: 1,
     }
 ]

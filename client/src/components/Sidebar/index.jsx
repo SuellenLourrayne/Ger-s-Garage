@@ -14,14 +14,15 @@ function SideBar ({ menu }) {
 
     useEffect(() => {
         menu.forEach(element => {
-            if (location.pathname === element.path) {
+            if (location.pathname+location.search === element.path) {
                 setActive(element.id);
             }
         });
     }, [location.pathname])
 
-    const __navigate = (id) => {
+    const __navigate = (id,path) => {
         setActive(id);
+        window.location.href = path;
     }
 
     return(
@@ -36,7 +37,7 @@ function SideBar ({ menu }) {
                 <div className='sidebar-container'>
                     <div className='sidebar-items'>
                         {menu.map((item, index) => (
-                            <div key={index} onClick={() => __navigate(item.id)}>
+                            <div key={index} onClick={() => __navigate(item.id, item.path)}>
                                 <SideBarItem
                                     active={item.id === active}
                                     item={item} />

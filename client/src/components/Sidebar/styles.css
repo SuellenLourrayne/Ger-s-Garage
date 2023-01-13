@@ -1,4 +1,4 @@
-a:hover{
+a, a:hover{
     text-decoration: none;
 }
 .sidebar {
@@ -9,7 +9,7 @@ a:hover{
     display: flex;
     justify-content: center;
     position: sticky;
-    background-image: linear-gradient(#c94d1c, #bf5028, #e48f64);
+    background-color: white;
 }
 .sidebar-logo-container {
     display: 'flex';
@@ -33,7 +33,7 @@ a:hover{
     padding: 1.5em;
     padding-left: 2em;
     display: flex;
-    color: #FFFFFF;
+    color: #000000;
     list-style: none;
     text-decoration: none;
     align-items: center;
@@ -41,7 +41,7 @@ a:hover{
     cursor: pointer;
 }
 .sidebar-item:hover,.sidebar-item-active:hover {
-    background-color: #771c00;
+    background-color: #d8744c;
     color: #FFFFFF;
     text-decoration: none;
 }
@@ -54,7 +54,7 @@ a:hover{
     text-decoration: none;
     align-items: center;
     justify-content: flex-start;
-    background-color: #771c00;
+    background-color: #d8744c;
     cursor: pointer;
 }
 .sidebar-item-icon {
@@ -68,7 +68,7 @@ a:hover{
 /* Footer */
 .sidebar-footer {
     padding: 1.5em;
-    color: #FFFFFF;
+    color: #000000;
     display: flex;
     align-items: center;
     justify-content: space-between;

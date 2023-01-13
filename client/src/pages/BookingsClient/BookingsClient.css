@@ -1,0 +1,24 @@
+.BookingsClient-container {
+    display: flex;
+    flex-direction: row;
+}
+.BookingsClient-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #F0F2F5;
+}
+.containerClient {
+    width: 100%;
+    padding: 30px 0px;
+}
+.linkNames {
+    cursor: pointer;
+    margin-right: 5px;
+}
+input[type="email"],
+input[type="password"] {
+  height: 25px;
+  border: 1px solid rgba(43, 43, 43, 0.2);
+  border-radius: 1%;
+}

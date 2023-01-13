@@ -1,3 +1,6 @@
+.booking-info{
+    width: 90%;
+}
 .dashboard-container {
     display: flex;
     flex-direction: row;

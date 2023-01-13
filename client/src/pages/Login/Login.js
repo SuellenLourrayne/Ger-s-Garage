@@ -18,7 +18,7 @@ function Login() {
       if(response.data.message)
         setWrongLogin(response.data.message);
       else
-        window.location.href = "/Dashboard?u="+response.data[0].idUser+"&t="+response.data[0].idUserTrust;
+        window.location.href = "/BookingList?u="+response.data[0].idUser+"&t="+response.data[0].idUserTrust;
     });
   };
 
@@ -37,6 +37,9 @@ function Login() {
         </div>
         <div className="button-container">
           <button type="submit">Login</button>
+        </div>
+        <div className="recoverPassword">
+          <p className="center"><a href="/RecoverPassword">Forgot your password?</a></p>
         </div>
       </form>
     </div>

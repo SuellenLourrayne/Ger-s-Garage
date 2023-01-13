@@ -5,17 +5,20 @@ import Logo from "../../assets/logo/black-logo.png"
 
 function Register() {
 
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (event) => {
     Axios.post('http://localhost:3002/api/Register', {
-      username: username,
+      
+      name: name,
       email: email,
       phone: phone,
       password: password,
+      idUserTrust: 3,
+
     }).then(alert("Register Done! Proceed to Login."), window.history.pushState("", "", "/Login") );
   };
 
@@ -27,8 +30,8 @@ function Register() {
         </div>
         <form className="formRegister" onSubmit={handleSubmit}>
         <p className="center"><a href="/Login">Already have an account? Login</a></p>
-          <label htmlFor="username">Full Name:</label>
-          <input type="text" name="username" onChange={(e)=> { setUsername(e.target.value) }} />
+          <label htmlFor="name">Full Name:</label>
+          <input type="text" name="name" onChange={(e)=> { setName(e.target.value) }} />
           <br />
           <label htmlFor="email">Email:</label>
           <input type="email" name="email" onChange={(e)=> { setEmail(e.target.value) }} />

@@ -69,3 +69,7 @@ input[type="submit"]:hover {
   align-items: center;
   text-align: center;
 }
+
+.recoverPassword{
+  padding-top: 5%;
+}

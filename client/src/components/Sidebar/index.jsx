@@ -4,8 +4,8 @@ import { useLocation } from 'react-router-dom';
 import SideBarItem from './sidebar-item';
 
 import './styles.css';
-import logo from '../../assets/logo/title-icon-white.png';
-import LogoutIcon from '../../assets/icons/logout.svg';
+import logo from '../../assets/logo/title-icon-black.png';
+import LogoutIcon from '../../assets/icons/box-arrow-right.svg';
 
 function SideBar ({ menu }) {
     const location = useLocation();
@@ -14,7 +14,7 @@ function SideBar ({ menu }) {
 
     useEffect(() => {
         menu.forEach(element => {
-            if (location.pathname+location.search === element.path) {
+            if (location.pathname === element.path) {
                 setActive(element.id);
             }
         });
@@ -22,7 +22,7 @@ function SideBar ({ menu }) {
 
     const __navigate = (id,path) => {
         setActive(id);
-        window.location.href = path;
+        window.location.href = path+location.search;
     }
 
     return(

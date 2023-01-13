@@ -11,7 +11,7 @@ function Staff () {
     }, []);
 
     const getInfo = () => {
-        Axios.get('http://localhost:3002/api/Staff', { }).then((response) => {
+        Axios.post('http://localhost:3002/api/Users', { idUserTrust: 2 }).then((response) => {
             const fullData = response.data;
             setList(fullData);
             if(response.data.message)

@@ -38,23 +38,18 @@ app.post('/api/Login', (req, res)=> {
   });
 });
 
-//get all staff users
-app.get('/api/Staff', (req, res)=> {
-  const sqlSelect = "SELECT * FROM users WHERE idUserTrust = 2";
-  db.query(sqlSelect, [], (err, result)=> {
-    if (err) {console.log(err)}
-    else if (result.length > 0) {res.send(result),console.log(result)}
-    else {console.log("No staff found.");res.send({message: "There is no staff registered."})};
-  });
-});
+//get staff/client users
+app.post('/api/Users', (req, res)=> {
+  const idUserTrust = req.body.idUserTrust;
+  console.log(idUserTrust);
 
-//get all client users
-app.get('/api/Client', (req, res)=> {
-  const sqlSelect = "SELECT * FROM users WHERE idUserTrust = 3";
-  db.query(sqlSelect, [], (err, result)=> {
+  const sqlSelect = "SELECT * FROM users WHERE idUserTrust = ?";
+  console.log(sqlSelect);
+
+  db.query(sqlSelect, [idUserTrust], (err, result)=> {
     if (err) {console.log(err)}
     else if (result.length > 0) {res.send(result),console.log(result)}
-    else {console.log("No client found.");res.send({message: "There is no client registered."})};
+    else {console.log("No user found.");res.send({message: "There is no one registered."})};
   });
 });
 

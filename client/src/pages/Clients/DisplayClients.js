@@ -105,7 +105,7 @@ export default function DisplayClient(props) {
                             </div>
                             <div className="p-2">
                                 {!(client.idUser === activeElement)? 
-                                    <Button color="primary" onClick={()=> updateActiveElement(client.idUser)} >Edit</Button> : <Button color="primary" onClick={handleSubmitUpdate}>Save</Button>
+                                    <Button color="primary" onClick={()=> updateActiveElement(client.idUser)} >Edit</Button> : <Button color="success" onClick={handleSubmitUpdate}>Save</Button>
                                 }
                             </div>
                         </div>
@@ -155,9 +155,9 @@ export default function DisplayClient(props) {
                     </div>
                     <div className='Client-content-container'>
                         <div className="d-flex justify-content-between">
-                            <div className="d-flex align-items-center">
-                                Client List
-                            </div>
+                            <p className="text-center">Name</p>
+                            <p className="w-50 text-center">Email</p>
+                            <p className="text-center">Phone Number</p>
                             <Button color="success" onClick={handleShow}>New Client</Button>
                             <Modal isOpen={show} toggle={handleClose} >
                                 <ModalHeader>New Client</ModalHeader>

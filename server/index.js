@@ -88,6 +88,77 @@ app.post('/api/UpdateUser', (req, res)=> {
   });
 });
 
+//get all products
+app.get('/api/Products', (req, res)=> {
+
+  const sqlSelect = "SELECT * FROM itens";
+  console.log(sqlSelect);
+
+  db.query(sqlSelect, [ ], (err, result)=> {
+    if (err) {console.log(err)}
+    else if (result.length > 0) {res.send(result),console.log(result)}
+    else {console.log("No produt found.");res.send({message: "There is no product registered."})};
+  });
+});
+
+//Insert new product
+app.post('/api/NewProduct', (req, res)=> {
+  
+  const description = req.body.description;
+  const cost = req.body.cost;
+  const sellPrice = req.body.sellPrice;
+  const qtd = req.body.qtd;
+
+  console.log(description+", "+cost+", "+sellPrice+", "+qtd);
+
+  const sqlInsert = "INSERT INTO itens (description, cost, sellPrice, qtd) VALUES (?, ?, ?, ?)";
+
+  db.query(sqlInsert, [description, cost, sellPrice, qtd], (err, result)=> {
+    console.log(result);
+  });
+});
+
+//update product
+app.post('/api/UpdateProduct', (req, res)=> {
+  const idItem = req.body.idItem;
+  const description = req.body.description;
+  const cost = req.body.cost;
+  const sellPrice = req.body.sellPrice;
+  const qtd = req.body.qtd;
+
+  console.log(idItem+" - "+description+" - "+cost+" - "+sellPrice+" - "+qtd);
+
+  let sqlInsert = "UPDATE itens SET ";
+  let count = 0;
+
+  if(description !== "") {
+    sqlInsert += "description = '"+ description +"'";
+    count++;
+  }
+  if(cost !== "") {
+    if(count>0) sqlInsert += ", ";
+    sqlInsert += "cost = '"+ cost +"'";
+    count++;
+  }
+  if(sellPrice !== "") {
+    if(count>0) sqlInsert += ", ";
+    sqlInsert += "sellPrice = '"+ sellPrice +"'";
+    count++;
+  }
+  if(qtd !== "") {
+    if(count>0) sqlInsert += ", ";
+    sqlInsert += "qtd = '"+ qtd +"'";
+  }
+
+  sqlInsert += " WHERE itens.idItem = ?";
+  
+  console.log(sqlInsert);
+  
+  db.query(sqlInsert, [idItem], (err, result)=> {
+    console.log(result);
+  });
+});
+
 //listen port
 app.listen(PORT, () => {
   console.log("running on port 3002");

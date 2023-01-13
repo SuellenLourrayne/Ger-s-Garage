@@ -34,6 +34,15 @@ export default function DisplayStaff(props) {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
+
+    //clean constants after updated
+    function clean (){
+        setIdUser("");
+        setName("");
+        setEmail("");
+        setPhone("");
+        setPassword("");
+    }
     
     //update user function
     const handleSubmitUpdate = (event) => {
@@ -43,6 +52,8 @@ export default function DisplayStaff(props) {
         email: email,
         phone: phone,
     }).then(alert("Staff updated."),updateActiveElement(-1));
+
+    clean();
     };
 
     //create user function
@@ -55,6 +66,7 @@ export default function DisplayStaff(props) {
         idUserTrust: 2,
         }).then(alert("Staff "+name+" Created."),handleClose());
 
+        clean();
         window.location.reload(true);
     };
 
@@ -93,7 +105,7 @@ export default function DisplayStaff(props) {
                             </div>
                             <div className="p-2">
                                 {!(staff.idUser === activeElement)? 
-                                    <Button color="primary" onClick={()=> updateActiveElement(staff.idUser)} >Edit</Button> : <Button color="primary" onClick={handleSubmitUpdate}>Save</Button>
+                                    <Button color="primary" onClick={()=> updateActiveElement(staff.idUser)} >Edit</Button> : <Button color="success" onClick={handleSubmitUpdate}>Save</Button>
                                 }
                             </div>
                         </div>
@@ -143,9 +155,9 @@ export default function DisplayStaff(props) {
                     </div>
                     <div className='Staff-content-container'>
                         <div className="d-flex justify-content-between">
-                            <div className="d-flex align-items-center">
-                                Staff List
-                            </div>
+                            <p className="text-center">Name</p>
+                            <p className="w-50 text-center">Email</p>
+                            <p className="text-center">Phone Number</p>
                             <Button color="success" onClick={handleShow}>New Staff</Button>
                             <Modal isOpen={show} toggle={handleClose} >
                                 <ModalHeader>New Staff</ModalHeader>

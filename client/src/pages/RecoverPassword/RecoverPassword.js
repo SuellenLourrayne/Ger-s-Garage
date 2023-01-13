@@ -18,7 +18,7 @@ function RecoverPassword() {
       if(response.data.message)
         setWrongRecoverPassword(response.data.message);
       else
-        window.location.href = "/BookingList?u="+response.data[0].idUser+"&t="+response.data[0].idUserTrust;
+        window.location.href = "/BookingList?u="+response.data[0].idUser;
     });
   };
 

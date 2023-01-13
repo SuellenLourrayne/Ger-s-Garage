@@ -11,7 +11,7 @@ function Clients () {
     }, []);
 
     const getInfo = () => {
-        Axios.post('http://localhost:3002/api/Users', { idUserTrust: 3 }).then((response) => {
+        Axios.post('http://localhost:3002/api/Users', { idUser: "", idUserTrust: 3 }).then((response) => {
             const fullData = response.data;
             setList(fullData);
             if(response.data.message)

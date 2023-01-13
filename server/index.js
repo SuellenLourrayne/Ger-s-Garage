@@ -33,22 +33,33 @@ app.post('/api/Login', (req, res)=> {
   const sqlSelect = "SELECT * FROM users WHERE email = ? AND password = ?";
   db.query(sqlSelect, [email, password], (err, result)=> {
     if (err) {console.log(err)}
-    else if (result.length > 0) {res.send(result)}
+    else if (result.length > 0) {res.send(result),console.log(result)}
     else {console.log("wrong email or password");res.send({message: "Wrong email or password"})};
   });
 });
 
 //get staff/client users
 app.post('/api/Users', (req, res)=> {
+  const idUser = req.body.idUser;
   const idUserTrust = req.body.idUserTrust;
-  console.log(idUserTrust);
+  //console.log(idUser+","+idUserTrust);
 
-  const sqlSelect = "SELECT * FROM users WHERE idUserTrust = ?";
-  console.log(sqlSelect);
+  let sqlSelect = "SELECT * FROM users WHERE ";
+  let count = 0;
+
+  if(idUser !== "") {
+    sqlSelect += "idUser = '"+ idUser +"'";
+    count++;
+  }
+  if(idUserTrust !== "") {
+    if(count>0) sqlSelect += " AND ";
+    sqlSelect += "idUserTrust = '"+ idUserTrust +"'";
+  }
+  //console.log(sqlSelect);
 
   db.query(sqlSelect, [idUserTrust], (err, result)=> {
     if (err) {console.log(err)}
-    else if (result.length > 0) {res.send(result),console.log(result)}
+    else if (result.length > 0) {res.send(result)}
     else {console.log("No user found.");res.send({message: "There is no one registered."})};
   });
 });
@@ -60,22 +71,22 @@ app.post('/api/UpdateUser', (req, res)=> {
   const email = req.body.email;
   const phone = req.body.phone;
 
-  console.log(idUser+" - "+name+" - "+email+" - "+phone);
+  console.log(idUser+","+name+","+email+","+phone);
 
   let sqlInsert = "UPDATE users SET ";
-  let qtd = 0;
+  let count = 0;
 
   if(name !== "") {
     sqlInsert += "name = '"+ name +"'";
-    qtd++;
+    count++;
   }
   if(email !== "") {
-    if(qtd>0) sqlInsert += ", ";
+    if(count>0) sqlInsert += ", ";
     sqlInsert += "email = '"+ email +"'";
-    qtd++;
+    count++;
   }
   if(phone !== "") {
-    if(qtd>0) sqlInsert += ", ";
+    if(count>0) sqlInsert += ", ";
     sqlInsert += "phone = '"+ phone +"'";
   }
 
@@ -109,7 +120,7 @@ app.post('/api/NewProduct', (req, res)=> {
   const sellPrice = req.body.sellPrice;
   const qtd = req.body.qtd;
 
-  console.log(description+", "+cost+", "+sellPrice+", "+qtd);
+  console.log(description+","+cost+", "+sellPrice+","+qtd);
 
   const sqlInsert = "INSERT INTO itens (description, cost, sellPrice, qtd) VALUES (?, ?, ?, ?)";
 
@@ -126,7 +137,7 @@ app.post('/api/UpdateProduct', (req, res)=> {
   const sellPrice = req.body.sellPrice;
   const qtd = req.body.qtd;
 
-  console.log(idItem+" - "+description+" - "+cost+" - "+sellPrice+" - "+qtd);
+  console.log(idItem+","+description+","+cost+","+sellPrice+","+qtd);
 
   let sqlInsert = "UPDATE itens SET ";
   let count = 0;
@@ -156,6 +167,41 @@ app.post('/api/UpdateProduct', (req, res)=> {
   
   db.query(sqlInsert, [idItem], (err, result)=> {
     console.log(result);
+  });
+});
+
+//get bookings
+app.post('/api/Bookings', (req, res)=> {
+  const idUser = req.body.idUser;
+  const idUserTrust = req.body.idUserTrust;
+  console.log(idUser+","+idUserTrust);
+
+  let sqlSelect = " SELECT "
+  + " u.iduser, bookings.idBooking, u.name, bookings.date, bookings.time, bt.description AS bookingType, v.license, status.description AS status, "
+  + " bookings.coments, t.description AS vehicle, e.description AS engine, b.description AS brand "
+  + " FROM bookings "
+  + " INNER JOIN users AS u ON bookings.idUser = u.idUser "
+  + " INNER JOIN relationcutomervehicledetails AS cv ON cv.idCustomer = u.idUser "
+  + " INNER JOIN vehicledetails AS v ON v.idVehicleDetail = cv.idVehicleDetail "
+  + " INNER JOIN vehicletypes AS t ON v.idVehicleType = t.idVehicleType "
+  + " INNER JOIN enginetypes AS e ON v.idEngineType = e.idEngineType "
+  + " INNER JOIN brands AS b ON v.idBrand = b.idBrand "
+  + " INNER JOIN bookingtypes AS bt ON bt.idBookingType = bookings.idBookingType "
+  + " INNER JOIN relationvehiclebookingtypes AS vb ON vb.idBookingType = bt.idBookingType AND vb.idVehicleType = t.idVehicleType"
+  + " INNER JOIN bookingstatus AS status ON status.idBookingStatus = bookings.idBookingStatus ";
+  let count = 0;
+
+  if(idUserTrust == 3) {
+    sqlSelect += "WHERE idUser = '"+ idUser +"'";
+  }
+
+  sqlSelect += " ORDER BY bookings.date";
+  console.log(sqlSelect);
+
+  db.query(sqlSelect, [ ], (err, result)=> {
+    if (err) {console.log(err)}
+    else if (result.length > 0) {res.send(result),console.log(result)}
+    else {console.log("No booking found.");res.send({message: "There is no booking registered."})};
   });
 });
 

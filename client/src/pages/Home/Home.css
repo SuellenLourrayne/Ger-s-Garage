@@ -91,6 +91,7 @@ body {
 
 .form-inline {
   color: #fff;
+  margin-right: 35px;
 }
 .logo {
   padding: 1rem;
@@ -100,11 +101,29 @@ body {
 .btn-orange {
   color: #ff6600;
   font-weight: bold;
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  text-decoration: none;
+  transition: 0.5s;
 }
 .btn-orange:hover {
-  border-color: #ff6600;
-  color: #ff6600;
-  background-color: #fff;
+  color: #e76f51;
+  font-size: 20px;
   text-decoration: none;
+  transition: 0.5s;
+}
+.bookingBtn {
+  text-decoration: none;
+  Color: #fff;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 20px 30px;
+  background-color: #ff6600;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  border: solid 2px rgb(48, 45, 45);
+  transition: 0.5s;
+}
+.bookingBtn:hover {
+  color:#fff;
+  font-size: 25px;
+  transition: 0.5s;
 }

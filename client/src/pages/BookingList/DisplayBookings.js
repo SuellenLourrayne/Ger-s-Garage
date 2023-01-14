@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import {
@@ -14,9 +14,12 @@ import {
     Button,
     InputGroup,
   } from 'reactstrap';
+  import DisplayStaff from './DisplayStaff';
 
 
 export default function DisplayBooking(props) {
+
+    const [list2, setList2] = useState('');
 
     //set active element
     const [activeElement, setActiveElement] = useState(-1);
@@ -24,14 +27,33 @@ export default function DisplayBooking(props) {
         setActiveElement(activeElement !== id ? id : -1);
     }
 
-    //verify user trust level
+    //get user info
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const [idUser, setIdUser] = useState(params.get("u"));
+    const [idUserLogged, setIdUserLogged] = useState(params.get("u"));
+    const [idUserLoggedTrust, setIdUserLoogedtrust] = useState("");
+
+    const getInfo = () => {
+        Axios.post('http://localhost:3002/api/Users', { idUser: idUserLogged, idUserTrust: idUserLoggedTrust }).then((response) => {
+            if(response.data.message)
+                console.log(response.data.message);
+            else {
+                setIdUserLoogedtrust(response.data[0].idUserTrust);
+            }
+        })
+        .catch(error => console.error(`Error: ${error}`));
+    };
+
+    useEffect(() => {
+        getInfo();
+        getStaff();
+    }, [params]);    
 
     //constants to create or update users
     const [idClient, setIdClient] = useState("");
     const [idStaff, setIdStaff] = useState("");
+    const [staffName, setStaffName] = useState("");
+    const [staff, setStaff] = useState("");
     const [idUserTrust, setIdUserTrust] = useState("");
     const [idBooking, setIdBooking] = useState("");
     const [name, setName] = useState("");
@@ -49,6 +71,7 @@ export default function DisplayBooking(props) {
     function clean (){
         setIdClient("");
         setIdStaff("");
+        setStaffName("");
         setIdUserTrust("");
         setIdBooking("");
         setName("");
@@ -68,9 +91,22 @@ export default function DisplayBooking(props) {
         Axios.post('http://localhost:3002/api/UpdateBooking', {
         idBooking: idBooking,
         idBookingStatus: status,
-    }).then(alert("Status updated."),updateActiveElement(-1));
+        idStaff: idStaff,
+    }).then(alert("Booking updated."),updateActiveElement(-1));
 
     clean();
+    };
+
+    const getStaff = () => {
+        Axios.post('http://localhost:3002/api/Users', { idUser: "", idUserTrust: 2 }).then((response) => {
+            if(response.data.message)
+                console.log(response.data.message);
+            else {
+                const fullData = response.data;
+                setList2(fullData);
+            }
+        })
+        .catch(error => console.error(`Error: ${error}`));
     };
 
     const [open, setOpen] = useState('0');
@@ -84,11 +120,18 @@ export default function DisplayBooking(props) {
         }
     }
 
-    function onChangeHandler (e) {
+    function onChangeHandlerStatus (e) {
         const index = e.target.selectedIndex;
         const el = e.target.childNodes[index]
         const option =  el.getAttribute('id'); 
         setStatus(option); 
+    }
+
+    function onChangeHandlerStaff (e) {
+        const index = e.target.selectedIndex;
+        const el = e.target.childNodes[index]
+        const option =  el.getAttribute('id'); 
+        setIdStaff(option); 
     }
 
     const displayBooking = (props) => {
@@ -181,10 +224,9 @@ export default function DisplayBooking(props) {
                                         <InputGroup>
                                             <Input id={booking.idBooking} name="status" type="select" 
                                             disabled={!(booking.idBooking === activeElement)}               
-                                            onChange={(e)=> { onChangeHandler(e); setIdBooking(e.target.id) }}                              
-                                            ><option>
-                                                {booking.status}
-                                            </option>
+                                            onChange={(e)=> { onChangeHandlerStatus(e); setIdBooking(e.target.id) }}
+                                            defaultValue={booking.status}                         
+                                            >
                                             <option id="1">
                                                 Booked 
                                             </option>
@@ -192,16 +234,16 @@ export default function DisplayBooking(props) {
                                             	In Service 
                                             </option>
                                             <option id="3">
-                                            	Fixed / Completed 
+                                                Fixed
                                             </option>
                                             <option id="4">
                                             	Collected 
                                             </option>
                                             <option id="5">
-                                            	Unrepairable / Scrapped 
+                                            	Unrepairable
                                             </option>
                                             </Input>
-                                            {!(idUser == booking.idClient)? 
+                                            {(idUserLoggedTrust !== 3) ? 
                                             <div>
                                             {!(booking.idBooking === activeElement)? 
                                             <Button color="primary" onClick={()=> updateActiveElement(booking.idBooking)} >Edit</Button> : <Button color="success" onClick={handleSubmitUpdate}>Save</Button>
@@ -211,6 +253,28 @@ export default function DisplayBooking(props) {
                                     </FormGroup>
                                     </Col>
                                     <Col>
+                                        {(idUserLoggedTrust === 1) ? 
+                                        <FormGroup>
+                                        <Label>
+                                            Staff Resposible:
+                                        </Label>
+                                    
+                                        <InputGroup>
+                                            <Input id={booking.idBooking} name="idStaff" type="select" 
+                                            disabled={!(booking.idStaff===activeElement)} 
+                                            onChange={(e)=> { onChangeHandlerStaff(e); setIdBooking(e.target.id) }}
+                                            defaultValue={booking.staffName}
+                                            >
+                                                <option id="0" >
+                                                    None
+                                                </option>
+                                            <DisplayStaff list={list2} /> 
+                                            </Input>
+                                            {!(booking.idStaff === activeElement)?
+                                            <Button color="primary" onClick={()=> updateActiveElement(booking.idStaff)} >Edit</Button> : <Button color="success" onClick={handleSubmitUpdate}>Save</Button>
+                                            }
+                                        </InputGroup>
+                                        </FormGroup> : <></> }
                                     </Col>
                                 </Row>
                                 <Row>

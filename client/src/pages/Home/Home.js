@@ -7,6 +7,8 @@ import Logo from "../../assets/logo/title-icon-white.png"
 import slide1 from "../../assets/slide1.jpg"
 import slide2 from "../../assets/slide2.jpg"
 import slide3 from "../../assets/slide3.jpg"
+import aboutus from "../../assets/about-us2.jpg"
+import mission from "../../assets/our-mission.jpg"
 /*********** IMAGES ***********/
 
 export default function Home() {
@@ -76,18 +78,14 @@ export default function Home() {
     </div>
 
     <div className="container marketing">
-
-    <div className="row featurette">
-    <div className="col-md-12">
-    <p className="lead">If you have any questions, please don't hesitate to reach out by email <b> info@gersgarage.com </b> or phone <b> +353 (83) 123-4567 </b> </p>
-    </div>
-    </div>
-
-    <hr className="featurette-divider"/>
+    
 
 
     <div className="row featurette">
-    <div className="col-md-12">
+    <div className="col-md-3">
+      <img alt='about us' width="100%" src={aboutus} />
+    </div>
+    <div className="col-md-9">
     <h2 className="featurette-heading">About Us</h2>
     <p className="lead">A small mechanic shop that provides repair and maintenance services for small and medium sized vehicles.</p>
     <p className="lead">We pride ourselves on our friendly and personalized approach.</p>
@@ -97,9 +95,8 @@ export default function Home() {
     </div>
 
     <hr className="featurette-divider"/>
-
     <div className="row featurette">
-    <div className="col-md-12 order-md-2 text-right">
+    <div className="col-md-9  text-right">
     <h2 className="featurette-heading">Our Mission</h2>
     <p className="lead">Our mission is to provide top-quality services and repairs for our customers' vehicles.</p>
     <p className="lead">We are a team of experienced professionals who are dedicated to delivering reliable and affordable services.</p>
@@ -107,10 +104,24 @@ export default function Home() {
     <p className="lead">We value honesty, integrity, and customer satisfaction above all else.</p>
     <p className="lead">Thank you for choosing us, and we look forward to continuing to serve you in the future!</p>
     </div>
+    <div className="col-md-3">
+      <img alt='mission' width="100%" src={mission} />
+    </div>
     </div>
 
-
     <hr className="featurette-divider"/>
+
+    <div className="text-center">
+      <a className="text-center bookingBtn" href="/login">
+        Booking Now
+      </a>
+    </div>
+
+    <div className="row featurette mt-5">
+    <div className="col-md-12">
+    <p className="lead text-center">If you have any questions, please don't hesitate to reach out by email <b> info@gersgarage.com </b> or phone <b> +353 (83) 123-4567 </b> </p>
+    </div>
+    </div>
 
     <hr/>
 

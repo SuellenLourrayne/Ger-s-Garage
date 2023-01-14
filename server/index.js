@@ -179,9 +179,10 @@ app.post('/api/Bookings', (req, res)=> {
 
   let sqlSelect = " SELECT "
   + " bookings.idClient, bookings.idBooking, u.name, DATE_FORMAT(bookings.date, '%D %M %Y') AS date, bookings.time, bt.description AS bookingType, v.license, status.description AS status, "
-  + " bookings.coments, t.description AS vehicle, e.description AS engine, b.description AS brand, u.idUserTrust, bookings.idStaff "
+  + " bookings.coments, t.description AS vehicle, e.description AS engine, b.description AS brand, u.idUserTrust, bookings.idStaff, s.name AS staffName "
   + " FROM bookings "
   + " INNER JOIN users AS u ON bookings.idClient = u.idUser "
+  + " INNER JOIN users AS s ON bookings.idStaff = s.idUser "
   + " INNER JOIN vehicledetails AS v ON bookings.idVehicle = v.idVehicleDetail "
   + " INNER JOIN vehicletypes AS t ON v.idVehicleType = t.idVehicleType "
   + " INNER JOIN enginetypes AS e ON v.idEngineType = e.idEngineType "
@@ -212,14 +213,28 @@ app.post('/api/Bookings', (req, res)=> {
 app.post('/api/UpdateBooking', (req, res)=> {
   const idBooking = req.body.idBooking;
   const idBookingStatus = req.body.idBookingStatus;
+  const idStaff = req.body.idStaff;
 
-  console.log(idBooking+","+idBookingStatus);
+  console.log(idBooking+","+idBookingStatus+","+idStaff);
 
-  const sqlUpdate = "UPDATE bookings SET idBookingStatus = ? WHERE idBooking = ?";
+  let sqlUpdate = "UPDATE bookings SET ";
+  let count = 0;
+
+  if(idBookingStatus != "") {
+    sqlUpdate += "idBookingStatus = "+idBookingStatus; 
+    count++;
+  }
+  if(idStaff != "") {
+    if(count>0) sqlInsert += ", ";
+    sqlUpdate += "idStaff = "+idStaff;
+    count++;
+  }
+
+  sqlUpdate += " WHERE idBooking = ?";
   
   console.log(sqlUpdate);
   
-  db.query(sqlUpdate, [idBookingStatus,idBooking], (err, result)=> {
+  db.query(sqlUpdate, [idBooking], (err, result)=> {
     console.log(result);
   });
 });

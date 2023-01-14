@@ -21,11 +21,10 @@ const SideBarItem = ({ item, active }) => {
     const params = new URLSearchParams(location.search);
     const [idUser, setIdUser] = useState(params.get("u"));
     const [idUserTrust, setIdUsertrust] = useState("");
-    const [name, setName] = useState("");
 
     useEffect(() => {
         getInfo();
-    }, []);
+    }, [params]);
 
     const getInfo = () => {
         Axios.post('http://localhost:3002/api/Users', { idUser: idUser, idUserTrust: idUserTrust }).then((response) => {
@@ -33,15 +32,14 @@ const SideBarItem = ({ item, active }) => {
                 console.log(response.data.message);
             else {
                 setIdUsertrust(response.data[0].idUserTrust);
-                setName(response.data[0].name);
             }
         })
         .catch(error => console.error(`Error: ${error}`));
     };
     
 
-    if(idUserTrust == 1 || idUserTrust == 2) { trustMultiple = 4 };
-    if(idUserTrust == item.trust || trustMultiple == item.trust || item.trust == 5) {
+    if(idUserTrust === 1 || idUserTrust === 2) { trustMultiple = 4 };
+    if(idUserTrust === item.trust || trustMultiple === item.trust || item.trust === 5) {
         return (
             
             <Link 

@@ -72,17 +72,11 @@ function BookingsClient () {
                                 </NavLink>
                                 </NavItem>
                                 <NavItem className="linkNames">
-                                <NavLink
-                                    active={tab == "2"? (true) : (false)}
-                                    onClick={() => setTab("2")}
-                                >
-                                    <h3>Bookings</h3>
-                                </NavLink>
                                 </NavItem>
                                 <NavItem className="linkNames">
                                 <NavLink
-                                    active={tab == "3"? (true) : (false)}
-                                    onClick={() => setTab("3")}
+                                    active={tab == "2"? (true) : (false)}
+                                    onClick={() => setTab("2")}
                                 >
                                     <h3>Vehicles</h3>
                                 </NavLink>
@@ -251,163 +245,8 @@ function BookingsClient () {
                                 </div>
                                 </TabPane>
 
-                                {/* BOOKINGS */}
-                                <TabPane tabId="2">
-                                <Accordion open={open} toggle={toggle}>
-                                    <AccordionItem>
-                                    <AccordionHeader targetId="1">
-                                            <div className="booking-info d-flex justify-content-between">
-                                                <div>Vehicle Name</div>
-                                                <div>Booking Required</div>
-                                                <div>Time</div>
-                                                <div>Status</div>
-                                            </div>
-                                        </AccordionHeader>
-                                    <AccordionBody accordionId="1">
-                                            <Row md="3">
-                                            <Col>
-                                            <FormGroup>
-                                                <Label>
-                                                Vehicle Name:
-                                                </Label>
-                                                <Input
-                                                id="vehicleName"
-                                                name="vehicleName"
-                                                type="textArea"
-                                                placeholder='Vehicle Name'
-                                                >
-                                                    
-                                                </Input>
-                                            </FormGroup>
-                                            </Col>
-                                            <Col>
-                                            <FormGroup>
-                                                <Label>
-                                                Vehicle Type:
-                                                </Label>
-                                                <Input
-                                                id="vehicleType"
-                                                name="vehicleType"
-                                                type="select"
-                                                
-                                                >
-                                                    <option>
-                                                    vehicleType
-                                                    </option>
-                                                </Input>
-                                            </FormGroup>
-                                            </Col>
-                                            <Col>
-                                            <FormGroup>
-                                                <Label>
-                                                Brand:
-                                                </Label>
-                                                <Input
-                                                id="brand"
-                                                name="brand"
-                                                type="select"
-                                                
-                                                >
-                                                    <option>
-                                                    Brand
-                                                    </option>
-                                                </Input>
-                                            </FormGroup>
-                                            </Col>
-                                            <Col>
-                                            <FormGroup>
-                                                <Label>
-                                                Licence:
-                                                </Label>
-                                                <Input
-                                                id="licence"
-                                                name="licence"
-                                                type="select"
-                                                
-                                                >
-                                                    <option>
-                                                    Licence
-                                                    </option>
-                                                </Input>
-                                            </FormGroup>
-                                            </Col>
-                                            <Col>
-                                            <FormGroup>
-                                                <Label style={{width: "100%"}}>
-                                                Booking Required:
-                                                </Label>
-                                                <Input
-                                                id="bookingRequired"
-                                                name="bookingRequired"
-                                                type="select"
-                                                
-                                                >
-                                                    <option>
-                                                    Booking Required:
-                                                    </option>
-                                                </Input>
-                                            </FormGroup>
-                                            </Col>
-                                            <Col>
-                                            <FormGroup>
-                                                <Label>
-                                                Engine Type:
-                                                </Label>
-                                                <Input
-                                                id="engineType"
-                                                name="engineType"
-                                                type="select"
-                                                
-                                                >
-                                                    <option>
-                                                        Engine Type
-                                                    </option>
-                                                </Input>
-                                            </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <hr/>
-                                        <Row md="2">
-                                            <Col>
-                                            <FormGroup>
-                                                <Label>
-                                                Date:
-                                                </Label>
-                                                <Input
-                                                id="date"
-                                                name="date"
-                                                type="Date"
-                                                
-                                                >
-                                                </Input>
-                                            </FormGroup>
-                                            </Col>
-                                        
-                                            <Col>
-                                            <FormGroup>
-                                                <Label>
-                                                Time:
-                                                </Label>
-                                                <InputGroup>
-                                                <Input
-                                                id="time"
-                                                name="time"
-                                                type="time"
-                                                >
-                                                </Input>
-                                                </InputGroup>
-                                            </FormGroup>
-                                            </Col>
-                                            <Col>
-                                            </Col>
-                                        </Row>
-                                    </AccordionBody>
-                                    </AccordionItem>
-                                </Accordion>
-                                </TabPane>
-
                                 {/* VEHICLES */}
-                                <TabPane tabId="3">
+                                <TabPane tabId="2">
                                 <Row>
                                     <Col sm="12">
                                         <Vehicle />

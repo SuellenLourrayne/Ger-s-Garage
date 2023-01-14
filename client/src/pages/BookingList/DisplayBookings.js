@@ -45,7 +45,7 @@ export default function DisplayBooking(props) {
     const [engine, setEngine] = useState("");
     const [brand, setTiBrand] = useState("");
 
-    //clean constants after updated
+    //clean constants 
     function clean (){
         setIdClient("");
         setIdStaff("");
@@ -89,7 +89,7 @@ export default function DisplayBooking(props) {
         const el = e.target.childNodes[index]
         const option =  el.getAttribute('id'); 
         setStatus(option); 
-      }
+    }
 
     const displayBooking = (props) => {
         const {lists, list} = props;

@@ -1,3 +1,6 @@
+.booking-info{
+    width: 90%;
+}
 .BookingsClient-container {
     display: flex;
     flex-direction: row;
@@ -10,7 +13,7 @@
 }
 .containerClient {
     width: 100%;
-    padding: 30px 0px;
+    padding: 20px 0px;
 }
 .linkNames {
     cursor: pointer;
@@ -21,4 +24,36 @@ input[type="password"] {
   height: 25px;
   border: 1px solid rgba(43, 43, 43, 0.2);
   border-radius: 1%;
+}
+.BookingsClient-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow: auto;
+}
+.BookingsClient-content-container {
+    margin: 1em;
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap:25px;
+    overflow: auto;
+}
+.BookingsClient-content-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.BookingsClient-content-header h2 {
+    margin-top: auto;
+    margin-bottom: auto;
+    color: black;
+    font-size: xx-large;
+    font-weight: 700;
+}
+.container {
+    width: 95%;
 }

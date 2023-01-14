@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import Axios from 'axios';
 import { BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
 import Vehicle from "./Vehicles"
 import {Row,
@@ -32,15 +33,57 @@ function BookingsClient () {
     const [tab, setTab] = useState("1")
     const [open, setOpen] = useState('0');
     const [statusEdit, setStatusEdit] = useState(true);
-    const [editProfile, setEditProfile] = useState(true)
-    
-    const toggle = (id) => {
-        if (open === id) {
-        setOpen();
-        } else {
-        setOpen(id);
-        }
+    const [editProfile, setEditProfile] = useState(true);
+
+    //new booking constants    
+    const [vehicleName, setVehicleName] = useState("");
+    const [idVehicleType, setIdVehicleType] = useState("");
+    const [idBrand, setIdBrand] = useState("");
+    const [license, setLicense] = useState("");
+    const [idEngineType, setIdEngineType] = useState("");
+    const [idBookingType, setIdBookingType] = useState("");
+    const [date, setDate] = useState("");
+    const [time, setTime] = useState("");
+    const [coments, setComents] = useState("");
+
+    //clean constants 
+    function clean (){
+        setVehicleName("");
+        setIdVehicleType("");
+        setIdBrand("");
+        setLicense("");
+        setIdEngineType("");
+        setIdBookingType("");
+        setDate("");
+        setTime("");
+        coments("");
     }
+
+    //create booking function
+    const HandleSubmitNew = (event) => {
+        Axios.post('http://localhost:3002/api/NewBooking', {
+            idVehicleType: idVehicleType,
+            idBrand: idBrand,
+            license: license,
+            date: date,
+            time: time,
+            idEngineType: idEngineType,
+            idBookingType: idBookingType,
+            vehicleName: vehicleName,
+            coments: coments,
+        }).then(alert("Booking Created."));
+
+        clean();
+        window.location.reload(true);
+    };
+    
+    function onChangeHandler (e) {
+        const index = e.target.selectedIndex;
+        const el = e.target.childNodes[index]
+        const option =  el.getAttribute('id'); 
+        setIdVehicleType(option); 
+    }
+
   return(
     <Router>
         <div className='BookingsClient-container'>
@@ -52,14 +95,9 @@ function BookingsClient () {
                             <h2>Bookings</h2>
                         </div>
                     </div>
-                    <Row md="2">
+                    <Row md="2" className='container'>
                                 <Col md="8">
                     <div className='BookingList-content-container'>
-                    <div className="d-flex justify-content-between">
-                        <div className="d-flex align-items-center">
-                            Bookings
-                        </div>
-                    </div>
                         <div>
                             
                             <Nav tabs>
@@ -99,6 +137,7 @@ function BookingsClient () {
                                         name="vehicleName"
                                         type="textArea"
                                         placeholder='Vehicle Name'
+                                        onChange={(e)=> { setVehicleName(e.target.value) }}
                                         >
                                             
                                         </Input>
@@ -113,11 +152,9 @@ function BookingsClient () {
                                         id="vehicleType"
                                         name="vehicleType"
                                         type="select"
-                                        
+                                        onChange={(e)=> { onChangeHandler(e); setIdVehicleType(e.target.id) }} 
                                         >
-                                            <option>
-                                            vehicleType
-                                            </option>
+                                            <option>Car</option>
                                         </Input>
                                     </FormGroup>
                                     </Col>
@@ -130,7 +167,7 @@ function BookingsClient () {
                                         id="brand"
                                         name="brand"
                                         type="select"
-                                        
+                                        onChange={(e)=> { setIdBrand(e.target.value) }}
                                         >
                                             <option>
                                             Brand
@@ -147,7 +184,7 @@ function BookingsClient () {
                                         id="licence"
                                         name="licence"
                                         type="select"
-                                        
+                                        onChange={(e)=> { setLicense(e.target.value) }}
                                         >
                                             <option>
                                             Licence
@@ -161,10 +198,10 @@ function BookingsClient () {
                                         Booking Required:
                                         </Label>
                                         <Input
-                                        id="bookingRequired"
-                                        name="bookingRequired"
+                                        id="bookingType"
+                                        name="bookingType"
                                         type="select"
-                                        
+                                        onChange={(e)=> { setIdBookingType(e.target.value) }}
                                         >
                                             <option>
                                             Booking Required:
@@ -178,10 +215,10 @@ function BookingsClient () {
                                         Engine Type:
                                         </Label>
                                         <Input
-                                        id="engineType"
-                                        name="engineType"
+                                        id="idEngineType"
+                                        name="idEngineType"
                                         type="select"
-                                        
+                                        onChange={(e)=> { setIdEngineType(e.target.value) }}
                                         >
                                             <option>
                                                 Engine Type
@@ -201,7 +238,7 @@ function BookingsClient () {
                                         id="date"
                                         name="date"
                                         type="Date"
-                                        
+                                        onChange={(e)=> { setDate(e.target.value) }}
                                         >
                                         </Input>
                                     </FormGroup>
@@ -217,6 +254,7 @@ function BookingsClient () {
                                         id="time"
                                         name="time"
                                         type="time"
+                                        onChange={(e)=> { setTime(e.target.value) }}
                                         >
                                         </Input>
                                         </InputGroup>
@@ -234,7 +272,7 @@ function BookingsClient () {
                                     id="coments"
                                     name="coments"
                                     type="textarea"
-                                    
+                                    onChange={(e)=> { setComents(e.target.value) }}
                                     />
                                 </FormGroup>
                                 </Row>

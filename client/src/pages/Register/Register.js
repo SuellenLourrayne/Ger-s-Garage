@@ -26,7 +26,7 @@ function Register() {
     <div className="Register">
       <div className="register-form">
         <div className="center">
-          <img className="logoForm" src={Logo} alt="Logo"/>
+          <a href="/"><img className="logoForm" src={Logo} alt="Logo" /></a> 
         </div>
         <form className="formRegister" onSubmit={handleSubmit}>
         <p className="center"><a href="/Login">Already have an account? Login</a></p>

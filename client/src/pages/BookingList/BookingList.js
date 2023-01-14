@@ -17,11 +17,6 @@ function BookingList () {
     const [idUserTrust, setIdUsertrust] = useState("");
     const [name, setName] = useState("");
 
-    useEffect(() => {
-        getBooking();
-        getInfo();
-    }, []);
-
     const getInfo = () => {
         Axios.post('http://localhost:3002/api/Users', { idUser: idUser, idUserTrust: idUserTrust }).then((response) => {
             if(response.data.message)
@@ -34,28 +29,47 @@ function BookingList () {
         .catch(error => console.error(`Error: ${error}`));
     };
 
-    const getBooking = () => {
+    const getBooking = async () => {
         //Administrator [view all bookings]
         if(idUserTrust == 1){
-            Axios.post('http://localhost:3002/api/Bookings', { idUser: "", idUserTrust: idUserTrust }).then((response) => {
+            const booking = await Axios.post('http://localhost:3002/api/Bookings', { idUser: "", idUserTrust: idUserTrust, idStaff: "" }).then((response) => {
             const fullData = response.data;
             setList(fullData);
             if(response.data.message)
                 console.log(response.data.message);
             })
             .catch(error => console.error(`Error: ${error}`));
+            setList(booking.data.results);
         }
 
         //Staff [view bookings allocated to them]
-    //    else if(idUserTrust == 2){
-
-  //      }
+        else if(idUserTrust == 2){
+            const booking = await Axios.post('http://localhost:3002/api/Bookings', { idUser: "", idUserTrust: idUserTrust, idStaff: idUser }).then((response) => {
+            const fullData = response.data;
+            setList(fullData);
+            if(response.data.message)
+                console.log(response.data.message);
+            })
+            .catch(error => console.error(`Error: ${error}`));
+            setList(booking.data.results);
+        }
         //Client [view bookings made by them]
-      //  else if(idUserTrust == 3){
-
-      //  }
+        else if(idUserTrust == 3){
+            const booking = await Axios.post('http://localhost:3002/api/Bookings', { idUser: idUser, idUserTrust: idUserTrust, idStaff: "" }).then((response) => {
+            const fullData = response.data;
+            setList(fullData);
+            if(response.data.message)
+                console.log(response.data.message);
+            })
+            .catch(error => console.error(`Error: ${error}`));
+            setList(booking.data.results);
+        }
     };
-
+  
+    useEffect(() => {
+        getInfo();
+        getBooking();
+    }, [name]);    
     
     return (
         <div className='dashboard-container'>

@@ -42,7 +42,7 @@ function RecoverPassword() {
     <div className="RecoverPassword">
       <div className="recoverPassword-form">
         <div className="center">
-          <img className="logoForm" src={Logo} alt="Logo"/>
+          <a href="/"><img className="logoForm" src={Logo} alt="Logo" /></a> 
         </div>
         {isSubmitted ? window.history.pushState("", "", "/Dashboard") : renderForm}
         <p className="center">{(wrongRecoverPassword)}</p>

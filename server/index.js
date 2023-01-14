@@ -174,15 +174,15 @@ app.post('/api/UpdateProduct', (req, res)=> {
 app.post('/api/Bookings', (req, res)=> {
   const idUser = req.body.idUser;
   const idUserTrust = req.body.idUserTrust;
-  console.log(idUser+","+idUserTrust);
+  const idStaff= req.body.idStaff;
+  console.log(idUser+","+idUserTrust+","+idStaff);
 
   let sqlSelect = " SELECT "
-  + " u.iduser, bookings.idBooking, u.name, bookings.date, bookings.time, bt.description AS bookingType, v.license, status.description AS status, "
-  + " bookings.coments, t.description AS vehicle, e.description AS engine, b.description AS brand "
+  + " bookings.idClient, bookings.idBooking, u.name, DATE_FORMAT(bookings.date, '%D %M %Y') AS date, bookings.time, bt.description AS bookingType, v.license, status.description AS status, "
+  + " bookings.coments, t.description AS vehicle, e.description AS engine, b.description AS brand, u.idUserTrust, bookings.idStaff "
   + " FROM bookings "
-  + " INNER JOIN users AS u ON bookings.idUser = u.idUser "
-  + " INNER JOIN relationcutomervehicledetails AS cv ON cv.idCustomer = u.idUser "
-  + " INNER JOIN vehicledetails AS v ON v.idVehicleDetail = cv.idVehicleDetail "
+  + " INNER JOIN users AS u ON bookings.idClient = u.idUser "
+  + " INNER JOIN vehicledetails AS v ON bookings.idVehicle = v.idVehicleDetail "
   + " INNER JOIN vehicletypes AS t ON v.idVehicleType = t.idVehicleType "
   + " INNER JOIN enginetypes AS e ON v.idEngineType = e.idEngineType "
   + " INNER JOIN brands AS b ON v.idBrand = b.idBrand "
@@ -192,7 +192,10 @@ app.post('/api/Bookings', (req, res)=> {
   let count = 0;
 
   if(idUserTrust == 3) {
-    sqlSelect += "WHERE idUser = '"+ idUser +"'";
+    sqlSelect += "WHERE bookings.idClient = '"+ idUser +"'";
+  }
+  else if(idUserTrust == 2) {
+    sqlSelect += "WHERE bookings.idStaff = '"+ idStaff +"'";
   }
 
   sqlSelect += " ORDER BY bookings.date";
@@ -202,6 +205,22 @@ app.post('/api/Bookings', (req, res)=> {
     if (err) {console.log(err)}
     else if (result.length > 0) {res.send(result),console.log(result)}
     else {console.log("No booking found.");res.send({message: "There is no booking registered."})};
+  });
+});
+
+//update booking
+app.post('/api/UpdateBooking', (req, res)=> {
+  const idBooking = req.body.idBooking;
+  const idBookingStatus = req.body.idBookingStatus;
+
+  console.log(idBooking+","+idBookingStatus);
+
+  const sqlUpdate = "UPDATE bookings SET idBookingStatus = ? WHERE idBooking = ?";
+  
+  console.log(sqlUpdate);
+  
+  db.query(sqlUpdate, [idBookingStatus,idBooking], (err, result)=> {
+    console.log(result);
   });
 });
 

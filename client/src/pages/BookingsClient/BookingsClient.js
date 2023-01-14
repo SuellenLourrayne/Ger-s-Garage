@@ -135,7 +135,7 @@ function BookingsClient () {
                                         <Input
                                         id="vehicleName"
                                         name="vehicleName"
-                                        type="textArea"
+                                        type="select"
                                         placeholder='Vehicle Name'
                                         onChange={(e)=> { setVehicleName(e.target.value) }}
                                         >

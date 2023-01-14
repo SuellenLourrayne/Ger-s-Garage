@@ -277,9 +277,10 @@ export default function DisplayBooking(props) {
                                         </FormGroup> : <></> }
                                     </Col>
                                 </Row>
-                                <Row>
+                                <Row md="3">
+                                    <Col className="col-8 col-md-8">
                                     <FormGroup>
-                                        <Label for="exampleText" className="booking-info">
+                                        <Label for="coments" className="booking-info">
                                             Customer Comments:
                                         </Label>
                                         <Input id="coments" name="coments" type="textarea" 
@@ -287,6 +288,18 @@ export default function DisplayBooking(props) {
                                         defaultValue={booking.coments}
                                         />
                                     </FormGroup>
+                                    </Col>
+                                    <Col>
+                                    <FormGroup>
+                                        <Label for="vehicle" className="booking-info">
+                                            Vehicle Type:
+                                        </Label>
+                                        <Input id="vehicle" name="vehicle" type="textArea" 
+                                        disabled={true} 
+                                        defaultValue={booking.vehicle}
+                                        />
+                                    </FormGroup>
+                                    </Col>
                                 </Row>
 
                             </AccordionBody>

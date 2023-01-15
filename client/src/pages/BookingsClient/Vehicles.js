@@ -1,4 +1,5 @@
-import React, {useState} from "react"
+import React, {useState , useEffect} from "react"
+import Axios from 'axios';
 import {Row,
     Col,
     NavItem,
@@ -24,11 +25,13 @@ import {Row,
     Form,
     ModalFooter,
     } from "reactstrap"
+import SearchBrands from "./searchBrands";
 
 export default function Vehicle() {
     const [open, setOpen] = useState('0');
     const [modal, setModal] = useState(false);
     const [editButton, setEditButton] = useState(true);
+    const [list2, setList2] = useState('');
 
     const toggleModal = () => setModal(!modal);
 
@@ -40,10 +43,61 @@ export default function Vehicle() {
         }
     }
 
+    //show or hide modal
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    //constants to create or update users
+    const [vehicleName, setVehicleName] = useState("");
+    const [idType, setIdType] = useState("");
+    const [idBrand, setIdBrand] = useState("");
+    const [idEngineType, setIdEngineType] = useState("");
+    const [license, setLicense] = useState("");
+
+    //clean constants after updated
+    function clean (){
+        setVehicleName("");
+        setIdType("");
+        setIdBrand("");
+        setIdEngineType("");
+        setLicense("");
+    }
+
+    //create vehicle function
+    const HandleSubmitNew = (event) => {
+        Axios.post('http://localhost:3002/api/NewVehicle', {
+            vehicleName: vehicleName,
+            idType: idType,
+            idBrand: idBrand,
+            idEngineType: idEngineType,
+            license: license,
+        }).then(alert("Vehicle "+vehicleName+" Created."),handleClose());
+
+        clean();
+        window.location.reload(true);
+    };
+
+    const getBrands = () => {
+        Axios.get('http://localhost:3002/api/Brands', {  }).then((response) => {
+            if(response.data.message)
+                console.log(response.data.message);
+            else {
+                const fullData = response.data;
+                setList2(fullData);
+            }
+        })
+        .catch(error => console.error(`Error: ${error}`));
+    };
+
+    useEffect(() => {
+        getBrands();
+    }, []);    
+
     return(
         <>
         <div className="d-flex justify-content-end" style={{marginBottom: "15px"}}>
-            <Button color="success" onClick={toggleModal}>New Vehicle</Button>
+            <Button color="success" onClick={handleShow}>New Vehicle</Button>
         </div>
         <Accordion open={open} toggle={toggle}>
             <AccordionItem>
@@ -159,8 +213,8 @@ export default function Vehicle() {
 
                     {/* MODAL SPACE */}
                     <div>
-                    <Modal isOpen={modal} toggle={toggleModal}>
-                            <ModalHeader toggle={toggleModal}>Edit</ModalHeader>
+                    <Modal isOpen={show} toggle={handleClose}>
+                        <ModalHeader>New Vehicle</ModalHeader>
                             <ModalBody>
                             <Form>
                             <FormGroup>
@@ -172,6 +226,7 @@ export default function Vehicle() {
                         name="vehicleName"
                         type="textArea"
                         placeholder='Vehicle Name'
+                        onChange={(e)=> { setVehicleName(e.target.value) }}
                         >
                             
                         </Input>
@@ -184,10 +239,19 @@ export default function Vehicle() {
                         id="vehicleType"
                         name="vehicleType"
                         type="select"
-                        
+                        onChange={(e)=> { setIdType(e.target.value) }}
                         >
-                            <option>
-                            Vehicle Type
+                            <option id="1">
+                            Car
+                            </option>
+                            <option id="2">
+                            Motorbike
+                            </option>
+                            <option id="3">
+                            Small Bus
+                            </option>
+                            <option id="4">
+                            Small Van
                             </option>
                         </Input>
                     </FormGroup>
@@ -199,11 +263,9 @@ export default function Vehicle() {
                         id="brand"
                         name="brand"
                         type="select"
-                        
+                        onChange={(e)=> { setIdBrand(e.target.value) }}
                         >
-                            <option>
-                            Brand
-                            </option>
+                        <SearchBrands list={list2} /> 
                         </Input>
                     </FormGroup>
                     <FormGroup>
@@ -213,12 +275,9 @@ export default function Vehicle() {
                         <Input
                         id="licence"
                         name="licence"
-                        type="select"
-                        
+                        type="textArea"
+                        onChange={(e)=> { setLicense(e.target.value) }}
                         >
-                            <option>
-                            Licence
-                            </option>
                         </Input>
                     </FormGroup>
                     <FormGroup>
@@ -229,16 +288,26 @@ export default function Vehicle() {
                         id="engineType"
                         name="engineType"
                         type="select"
+                        onChange={(e)=> { setIdEngineType(e.target.value) }}
                         >
-                            <option>
-                            Engine Type
-                            </option>
+                        <option id="1">
+                        Diesel
+                        </option>
+                        <option id="2">
+                        Petrol
+                        </option>
+                        <option id="3">
+                        Hybrid
+                        </option>
+                        <option id="4">
+                        Eletric
+                        </option>
                         </Input>
                     </FormGroup>
                             </Form>
                             </ModalBody>
                             <ModalFooter>
-                            <Button color="success" onClick={toggleModal}>
+                            <Button color="success" onClick={HandleSubmitNew}>
                                 Save
                             </Button>{' '}
                             <Button color="secondary" onClick={toggleModal}>

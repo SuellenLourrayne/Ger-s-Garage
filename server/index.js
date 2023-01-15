@@ -239,6 +239,39 @@ app.post('/api/UpdateBooking', (req, res)=> {
   });
 });
 
+//Insert new vehicle
+app.post('/api/NewVehicle', (req, res)=> {
+  
+  const idUser = req.body.idUser;
+  const vehicleName = req.body.vehicleName;
+  const idType = req.body.idType;
+  const idBrand = req.body.idBrand;
+  const idEngineType = req.body.idEngineType;
+  const license = req.body.license;
+
+  console.log(idUser+","+vehicleName+", "+idType+","+idBrand+","+idEngineType+","+license);
+
+  const sqlInsert = "INSERT INTO vehicledetails(idUser, idVehicleType, idEngineType, idBrand, name, license) VALUES "
+  +"(?, ?, ?, ?, ?, ?)";
+
+  db.query(sqlInsert, [idUser, idType, idEngineType, idBrand, vehicleName, license], (err, result)=> {
+    console.log(result);
+  });
+});
+
+//get all brands
+app.get('/api/Brands', (req, res)=> {
+
+  const sqlSelect = "SELECT * FROM brands";
+  console.log(sqlSelect);
+
+  db.query(sqlSelect, [ ], (err, result)=> {
+    if (err) {console.log(err)}
+    else if (result.length > 0) {res.send(result),console.log(result)}
+    else {console.log("No brand found.");res.send({message: "There is no brand registered."})};
+  });
+});
+
 //listen port
 app.listen(PORT, () => {
   console.log("running on port 3002");

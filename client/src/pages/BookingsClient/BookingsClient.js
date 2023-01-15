@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useEffect,useState} from "react";
+import { useLocation } from 'react-router-dom';
 import Axios from 'axios';
 import { BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
 import Vehicle from "./Vehicles"
@@ -58,6 +59,34 @@ function BookingsClient () {
         setTime("");
         coments("");
     }
+
+    //get user info
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const [idUser, setIdUser] = useState(params.get("u"));
+    const [idUserTrust, setIdUsertrust] = useState("");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [password, setPassword] = useState("");
+
+    const getInfo = () => {
+        Axios.post('http://localhost:3002/api/Users', { idUser: idUser, idUserTrust: idUserTrust }).then((response) => {
+            if(response.data.message)
+                console.log(response.data.message);
+            else {
+                setIdUsertrust(response.data[0].idUserTrust);
+                setName(response.data[0].name);
+                setEmail(response.data[0].email);
+                setPassword(response.data[0].password);
+            }
+        })
+        .catch(error => console.error(`Error: ${error}`));
+    };
+
+    useEffect(() => {
+        getInfo();
+    }, [name]);    
 
     //create booking function
     const HandleSubmitNew = (event) => {
@@ -313,7 +342,7 @@ function BookingsClient () {
                                             type="textArea"
                                             placeholder="Dark Sabrina"
                                             disabled={editProfile}
-                                            
+                                            defaultValue={name}
                                             />
                                             </FormGroup>
                                             <FormGroup>
@@ -326,7 +355,7 @@ function BookingsClient () {
                                             type="textArea"
                                             placeholder="darksabrina@gmail.com"
                                             disabled={editProfile}
-                                            
+                                            defaultValue={email}
                                             />
                                             </FormGroup>
                                             <FormGroup>
@@ -339,7 +368,7 @@ function BookingsClient () {
                                             type="textArea"
                                             placeholder="4002-8922"
                                             disabled={editProfile}
-                                            
+                                            defaultValue={phone}
                                             />
                                             </FormGroup>
                                             <FormGroup>

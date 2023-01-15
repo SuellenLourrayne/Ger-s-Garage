@@ -183,7 +183,7 @@ app.post('/api/Bookings', (req, res)=> {
   + " FROM bookings "
   + " INNER JOIN users AS u ON bookings.idClient = u.idUser "
   + " INNER JOIN users AS s ON bookings.idStaff = s.idUser "
-  + " INNER JOIN vehicledetails AS v ON bookings.idVehicle = v.idVehicleDetail "
+  + " INNER JOIN vehicledetails AS v ON bookings.idVehicleDetail = v.idVehicleDetail "
   + " INNER JOIN vehicletypes AS t ON v.idVehicleType = t.idVehicleType "
   + " INNER JOIN enginetypes AS e ON v.idEngineType = e.idEngineType "
   + " INNER JOIN brands AS b ON v.idBrand = b.idBrand "
@@ -249,7 +249,7 @@ app.post('/api/NewVehicle', (req, res)=> {
   const idEngineType = req.body.idEngineType;
   const license = req.body.license;
 
-  console.log(idUser+","+vehicleName+", "+idType+","+idBrand+","+idEngineType+","+license);
+  console.log(idUser+","+vehicleName+","+idType+","+idBrand+","+idEngineType+","+license);
 
   const sqlInsert = "INSERT INTO vehicledetails(idUser, idVehicleType, idEngineType, idBrand, name, license) VALUES "
   +"(?, ?, ?, ?, ?, ?)";
@@ -269,6 +269,94 @@ app.get('/api/Brands', (req, res)=> {
     if (err) {console.log(err)}
     else if (result.length > 0) {res.send(result),console.log(result)}
     else {console.log("No brand found.");res.send({message: "There is no brand registered."})};
+  });
+});
+
+//get vehicles
+app.post('/api/Vehicles', (req, res)=> {
+
+  const idUser = req.body.idUser;
+
+  const sqlSelect = "SELECT v.idVehicleDetail, v.idUser, t.description AS type, e.description AS engine, b.description AS brand, "
+  + " v.name, v.license FROM vehicleDetails AS v "
+  + " INNER JOIN vehicletypes AS t ON v.idVehicleType = t.idVehicleType "
+  + " INNER JOIN enginetypes AS e ON v.idEngineType = e.idEngineType "
+  + " INNER JOIN brands AS b ON v.idBrand = b.idBrand "
+  + " WHERE idUser = ?";
+  console.log(sqlSelect);
+
+  db.query(sqlSelect, [ idUser ], (err, result)=> {
+    if (err) {console.log(err)}
+    else if (result.length > 0) {res.send(result),console.log(result)}
+    else {console.log("No vehicle found.");res.send({message: "There is no vehicle registered."})};
+  });
+});
+
+//update vehicle
+app.post('/api/UpdateVehicle', (req, res)=> {
+  const idVehicleDetail = req.body.idVehicleDetail;
+  const idVehicleType = req.body.idType;
+  const idEngineType = req.body.idEngineType;
+  const idBrand = req.body.idBrand;
+  const name = req.body.vehicleName;
+  const license = req.body.license;
+
+  console.log(idVehicleDetail+","+idVehicleType+","+idEngineType+","+idBrand+","+name+","+license);
+
+  let sqlUpdate = "UPDATE vehicleDetails SET ";
+  let count = 0;
+
+  if(idVehicleType != "") {
+    sqlUpdate += "idVehicleType = "+idVehicleType; 
+    count++;
+  }
+  if(idEngineType != "") {
+    if(count>0) sqlUpdate += ", ";
+    sqlUpdate += "idEngineType = "+idEngineType;
+    count++;
+  }
+  if(idBrand != "") {
+    if(count>0) sqlUpdate += ", ";
+    sqlUpdate += "idBrand = "+idBrand;
+    count++;
+  }
+  if(name != "") {
+    if(count>0) sqlUpdate += ", ";
+    sqlUpdate += "name = '"+name+"'";
+    count++;
+  }
+  if(license != "") {
+    if(count>0) sqlUpdate += ", ";
+    sqlUpdate += "license = '"+license+"'";
+    count++;
+  }
+
+  sqlUpdate += " WHERE idVehicleDetail = ?";
+  
+  console.log(sqlUpdate);
+  
+  db.query(sqlUpdate, [ idVehicleDetail ], (err, result)=> {
+    console.log(result);
+  });
+});
+
+//Insert new booking
+app.post('/api/NewBooking', (req, res)=> {
+  
+  const idClient = req.body.idClient;
+  const idVehicleDetail = req.body.idVehicleDetail;
+  const idBookingType = req.body.idBookingType;
+  const date = req.body.date;
+  const time = req.body.time;
+  const coments = req.body.coments;
+
+  console.log(idClient+","+idVehicleDetail+","+idBookingType+","+date+","+time+","+coments);
+
+  const sqlInsert = "INSERT INTO bookings(idClient, idVehicleDetail, idBookingType, date, time, coments) VALUES (?, ?, ?, ?, ?, ?)";
+  console.log(sqlInsert);
+
+  db.query(sqlInsert, [ idClient, idVehicleDetail, idBookingType, date, time, coments], (err, result)=> {
+    console.log(result);
   });
 });
 

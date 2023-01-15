@@ -29,19 +29,14 @@ import SideBar from '../../components/Sidebar';
 import sidebar_menu from '../../constants/sidebar-menu';
 
 import './BookingsClient.css';
+import SearchVehiclesRegistered from "./searchVehiclesRegistered";
 
 function BookingsClient () {
     const [tab, setTab] = useState("1")
-    const [open, setOpen] = useState('0');
-    const [statusEdit, setStatusEdit] = useState(true);
     const [editProfile, setEditProfile] = useState(true);
 
     //new booking constants    
-    const [vehicleName, setVehicleName] = useState("");
-    const [idVehicleType, setIdVehicleType] = useState("");
-    const [idBrand, setIdBrand] = useState("");
-    const [license, setLicense] = useState("");
-    const [idEngineType, setIdEngineType] = useState("");
+    const [idVehicleDetail, setIdVehicleDetail] = useState("");
     const [idBookingType, setIdBookingType] = useState("");
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
@@ -49,11 +44,7 @@ function BookingsClient () {
 
     //clean constants 
     function clean (){
-        setVehicleName("");
-        setIdVehicleType("");
-        setIdBrand("");
-        setLicense("");
-        setIdEngineType("");
+        setIdVehicleDetail("");
         setIdBookingType("");
         setDate("");
         setTime("");
@@ -69,6 +60,7 @@ function BookingsClient () {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
+    const [list, setList] = useState('');
 
     const getInfo = () => {
         Axios.post('http://localhost:3002/api/Users', { idUser: idUser, idUserTrust: idUserTrust }).then((response) => {
@@ -86,32 +78,48 @@ function BookingsClient () {
 
     useEffect(() => {
         getInfo();
-    }, [name]);    
+        getVehicles();
+    }, []);    
 
     //create booking function
     const HandleSubmitNew = (event) => {
         Axios.post('http://localhost:3002/api/NewBooking', {
-            idVehicleType: idVehicleType,
-            idBrand: idBrand,
-            license: license,
+            idClient: idUser,
+            idVehicleDetail: idVehicleDetail,
+            idBookingType: idBookingType,
             date: date,
             time: time,
-            idEngineType: idEngineType,
-            idBookingType: idBookingType,
-            vehicleName: vehicleName,
             coments: coments,
-        }).then(alert("Booking Created."));
+        }).then(alert("Booking Created."),window.location.reload(true));
 
         clean();
-        window.location.reload(true);
     };
     
-    function onChangeHandler (e) {
+    function onChangeHandlerIdVehicleDetail (e) {
         const index = e.target.selectedIndex;
         const el = e.target.childNodes[index]
         const option =  el.getAttribute('id'); 
-        setIdVehicleType(option); 
+        setIdVehicleDetail(option); 
     }
+    
+    function onChangeHandlerBookingType (e) {
+        const index = e.target.selectedIndex;
+        const el = e.target.childNodes[index]
+        const option =  el.getAttribute('id'); 
+        setIdBookingType(option); 
+    }
+
+    const getVehicles = () => {
+        Axios.post('http://localhost:3002/api/Vehicles', { idUser: idUser }).then((response) => {
+            if(response.data.message)
+                console.log(response.data.message);
+            else {
+                const fullData = response.data;
+                setList(fullData);
+            }
+        })
+        .catch(error => console.error(`Error: ${error}`));
+    };
 
   return(
     <Router>
@@ -155,7 +163,7 @@ function BookingsClient () {
                                 <TabPane tabId="1">
                                 <Row>
                                     <Col sm="12">
-                                    <Row md="3">
+                                    <Row md="2">
                                     <Col>
                                     <FormGroup>
                                         <Label>
@@ -166,95 +174,44 @@ function BookingsClient () {
                                         name="vehicleName"
                                         type="select"
                                         placeholder='Vehicle Name'
-                                        onChange={(e)=> { setVehicleName(e.target.value) }}
+                                        onChange={(e)=> { onChangeHandlerIdVehicleDetail(e); }}
                                         >
-                                            
+                                        <option>
+                                        Choose an option
+                                        </option>
+                                        <SearchVehiclesRegistered list={list} /> 
                                         </Input>
                                     </FormGroup>
-                                    </Col>
-                                    <Col>
-                                    <FormGroup>
-                                        <Label>
-                                        Vehicle Type:
-                                        </Label>
-                                        <Input
-                                        id="vehicleType"
-                                        name="vehicleType"
-                                        type="select"
-                                        onChange={(e)=> { onChangeHandler(e); setIdVehicleType(e.target.id) }} 
-                                        >
-                                            <option>Car</option>
-                                        </Input>
-                                    </FormGroup>
-                                    </Col>
-                                    <Col>
-                                    <FormGroup>
-                                        <Label>
-                                        Brand:
-                                        </Label>
-                                        <Input
-                                        id="brand"
-                                        name="brand"
-                                        type="select"
-                                        onChange={(e)=> { setIdBrand(e.target.value) }}
-                                        >
-                                            <option>
-                                            Brand
-                                            </option>
-                                        </Input>
-                                    </FormGroup>
-                                    </Col>
-                                    <Col>
-                                    <FormGroup>
-                                        <Label>
-                                        Licence:
-                                        </Label>
-                                        <Input
-                                        id="licence"
-                                        name="licence"
-                                        type="select"
-                                        onChange={(e)=> { setLicense(e.target.value) }}
-                                        >
-                                            <option>
-                                            Licence
-                                            </option>
-                                        </Input>
-                                    </FormGroup>
-                                    </Col>
+                                    </Col>                                    
                                     <Col>
                                     <FormGroup>
                                         <Label style={{width: "100%"}}>
-                                        Booking Required:
+                                        Type of Booking:
                                         </Label>
                                         <Input
                                         id="bookingType"
                                         name="bookingType"
                                         type="select"
-                                        onChange={(e)=> { setIdBookingType(e.target.value) }}
+                                        onChange={(e)=> { onChangeHandlerBookingType(e) }}
                                         >
-                                            <option>
-                                            Booking Required:
+                                            <option id="0">
+                                            Choose an option
+                                            </option>
+                                            <option id="1">
+                                            Annual Service
+                                            </option>
+                                            <option id="2">
+                                            Major Service
+                                            </option>
+                                            <option id="3">
+                                            Repair or Fault
+                                            </option>
+                                            <option id="4">
+                                            Major Repair
                                             </option>
                                         </Input>
                                     </FormGroup>
-                                    </Col>
-                                    <Col>
-                                    <FormGroup>
-                                        <Label>
-                                        Engine Type:
-                                        </Label>
-                                        <Input
-                                        id="idEngineType"
-                                        name="idEngineType"
-                                        type="select"
-                                        onChange={(e)=> { setIdEngineType(e.target.value) }}
-                                        >
-                                            <option>
-                                                Engine Type
-                                            </option>
-                                        </Input>
-                                    </FormGroup>
-                                    </Col>
+                                    </Col>                                    
                                 </Row>
                                 <hr/>
                                 <Row md="2">
@@ -308,7 +265,7 @@ function BookingsClient () {
                                 </Col>
                                 </Row>
                                 <div className="d-flex justify-content-center">
-                                <Button color="success">Create Booking</Button>
+                                <Button color="success" onClick={HandleSubmitNew} >Create Booking</Button>
                                 </div>
                                 </TabPane>
 

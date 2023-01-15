@@ -256,7 +256,7 @@ export default function DisplayBooking(props) {
                                         {(idUserLoggedTrust === 1) ? 
                                         <FormGroup>
                                         <Label>
-                                            Staff Resposible:
+                                            Staff Responsible:
                                         </Label>
                                     
                                         <InputGroup>
@@ -294,7 +294,7 @@ export default function DisplayBooking(props) {
                                         <Label for="vehicle" className="booking-info">
                                             Vehicle Type:
                                         </Label>
-                                        <Input id="vehicle" name="vehicle" type="textArea" 
+                                        <Input id="vehicle" name="vehicle" type="textarea" 
                                         disabled={true} 
                                         defaultValue={booking.vehicle}
                                         />

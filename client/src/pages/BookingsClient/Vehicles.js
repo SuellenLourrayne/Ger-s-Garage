@@ -1,24 +1,11 @@
 import React, {useState , useEffect} from "react"
 import Axios from 'axios';
-import {Row,
-    Col,
-    NavItem,
-    NavLink,
-    Nav,
-    TabContent,
-    TabPane,
-    Card,
-    CardTitle,
-    CardText,
+import { useLocation } from 'react-router-dom';
+import {
     Button,
     FormGroup,
     Input,
     Label,
-    InputGroup,
-    Accordion,
-    AccordionItem,
-    AccordionHeader,
-    AccordionBody,
     Modal,
     ModalHeader,
     ModalBody,
@@ -26,22 +13,19 @@ import {Row,
     ModalFooter,
     } from "reactstrap"
 import SearchBrands from "./searchBrands";
+import SearchVehicles from "./searchVehicles";
 
 export default function Vehicle() {
-    const [open, setOpen] = useState('0');
     const [modal, setModal] = useState(false);
-    const [editButton, setEditButton] = useState(true);
     const [list2, setList2] = useState('');
+    const [list3, setList3] = useState('');
 
     const toggleModal = () => setModal(!modal);
 
-    const toggle = (id) => {
-        if (open === id) {
-        setOpen();
-        } else {
-        setOpen(id);
-        }
-    }
+    //get user info
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const [idUserLogged, setIdUserLogged] = useState(params.get("u"));
 
     //show or hide modal
     const [show, setShow] = useState(false);
@@ -67,6 +51,7 @@ export default function Vehicle() {
     //create vehicle function
     const HandleSubmitNew = (event) => {
         Axios.post('http://localhost:3002/api/NewVehicle', {
+            idUser: idUserLogged,
             vehicleName: vehicleName,
             idType: idType,
             idBrand: idBrand,
@@ -90,129 +75,54 @@ export default function Vehicle() {
         .catch(error => console.error(`Error: ${error}`));
     };
 
+    const getVehicles = () => {
+        Axios.post('http://localhost:3002/api/Vehicles', { idUser: idUserLogged }).then((response) => {
+            if(response.data.message)
+                console.log(response.data.message);
+            else {
+                const fullData = response.data;
+                setList3(fullData);
+            }
+        })
+        .catch(error => console.error(`Error: ${error}`));
+    };
+
     useEffect(() => {
         getBrands();
+        getVehicles();
     }, []);    
+
+    function onChangeHandlerEngineType (e) {
+        const index = e.target.selectedIndex;
+        const el = e.target.childNodes[index]
+        const option =  el.getAttribute('id'); 
+        setIdEngineType(option); 
+    }
+
+    function onChangeHandlerBrand (e) {
+        const index = e.target.selectedIndex;
+        const el = e.target.childNodes[index]
+        const option =  el.getAttribute('id'); 
+        setIdBrand(option); 
+    }
+
+    function onChangeHandlerVehicleType (e) {
+        const index = e.target.selectedIndex;
+        const el = e.target.childNodes[index]
+        const option =  el.getAttribute('id'); 
+        setIdType(option); 
+    }
 
     return(
         <>
         <div className="d-flex justify-content-end" style={{marginBottom: "15px"}}>
             <Button color="success" onClick={handleShow}>New Vehicle</Button>
         </div>
-        <Accordion open={open} toggle={toggle}>
-            <AccordionItem>
-            <AccordionHeader targetId="1">
-                    <div className="booking-info d-flex justify-content-between">
-                        <div>Vehicle Name</div>
-                        <div>Vehicle Type</div>
-                        <div>Brand</div>
-                    </div>
-                </AccordionHeader>
-            <AccordionBody accordionId="1">
-                    <Row md="2">
-                    <Col>
-                    <FormGroup>
-                        <Label>
-                        Vehicle Name:
-                        </Label>
-                        <Input
-                        id="vehicleName"
-                        name="vehicleName"
-                        type="textArea"
-                        placeholder='Vehicle Name'
-                        disabled={editButton}
-                        >
-                            
-                        </Input>
-                    </FormGroup>
-                    </Col>
-                    <Col>
-                    <FormGroup>
-                        <Label>
-                        Vehicle Type:
-                        </Label>
-                        <Input
-                        id="vehicleType"
-                        name="vehicleType"
-                        type="select"
-                        disabled={editButton}
-                        >
-                            <option>
-                            Vehicle Type
-                            </option>
-                        </Input>
-                    </FormGroup>
-                    </Col>
-                    </Row>
-                    <Row md="3">
 
-                    <Col>
-                    <FormGroup>
-                        <Label>
-                        Brand:
-                        </Label>
-                        <Input
-                        id="brand"
-                        name="brand"
-                        type="select"
-                        disabled={editButton}
-                        >
-                            <option>
-                            Brand
-                            </option>
-                        </Input>
-                    </FormGroup>
-                    </Col>
-                    <Col>
-                    <FormGroup>
-                        <Label>
-                        Licence:
-                        </Label>
-                        <Input
-                        id="licence"
-                        name="licence"
-                        type="select"
-                        disabled={editButton}
-                        >
-                            <option>
-                            Licence
-                            </option>
-                        </Input>
-                    </FormGroup>
-                    </Col>
-                    <Col>
-                    <FormGroup>
-                        <Label style={{width: "100%"}}>
-                        Engine Type:
-                        </Label>
-                        <Input
-                        id="engineType"
-                        name="engineType"
-                        type="select"
-                        disabled={editButton}
-                        >
-                            <option>
-                            Engine Type
-                            </option>
-                        </Input>
-                    </FormGroup>
-                    </Col>
-                    </Row>
-                    <div>
-                        {editButton? (
-                            <Button color="info" onClick={() => setEditButton(!editButton)}>Edit</Button>
-                        ) : 
-                        (
-                        <div className="d-flex justify-content-between">
-                        <Button color="success" onClick={() => setEditButton(!editButton)}>Save</Button>
-                        <Button color="danger" onClick={() => setEditButton(!editButton)}>Delete</Button>
-                        </div>
-                        )}
-                        
-                    </div>
-
-                    {/* MODAL SPACE */}
-                    <div>
+        <SearchVehicles list={list3} />
+        
+        {/* MODAL SPACE */}
+        <div>
                     <Modal isOpen={show} toggle={handleClose}>
                         <ModalHeader>New Vehicle</ModalHeader>
                             <ModalBody>
@@ -236,11 +146,14 @@ export default function Vehicle() {
                         Vehicle Type:
                         </Label>
                         <Input
-                        id="vehicleType"
-                        name="vehicleType"
+                        id="idVehicleType"
+                        name="idVehicleType"
                         type="select"
-                        onChange={(e)=> { setIdType(e.target.value) }}
+                        onChange={(e)=> { onChangeHandlerVehicleType(e) }}
                         >
+                            <option>
+                            Choose an option
+                            </option>
                             <option id="1">
                             Car
                             </option>
@@ -263,8 +176,11 @@ export default function Vehicle() {
                         id="brand"
                         name="brand"
                         type="select"
-                        onChange={(e)=> { setIdBrand(e.target.value) }}
+                        onChange={(e)=> { onChangeHandlerBrand(e) }}
                         >
+                        <option>
+                        Choose an option
+                        </option>
                         <SearchBrands list={list2} /> 
                         </Input>
                     </FormGroup>
@@ -288,8 +204,11 @@ export default function Vehicle() {
                         id="engineType"
                         name="engineType"
                         type="select"
-                        onChange={(e)=> { setIdEngineType(e.target.value) }}
-                        >
+                        onChange={(e)=> { onChangeHandlerEngineType(e) }}
+                        > 
+                        <option>
+                        Choose an option
+                        </option>
                         <option id="1">
                         Diesel
                         </option>
@@ -316,9 +235,6 @@ export default function Vehicle() {
                             </ModalFooter>
                         </Modal>
                     </div>
-            </AccordionBody>
-            </AccordionItem>
-        </Accordion>
         </>
     );
 }

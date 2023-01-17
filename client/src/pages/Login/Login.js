@@ -51,7 +51,7 @@ function Login() {
         <div className="center">
           <a href="/"><img className="logoForm" src={Logo} alt="Logo" /></a> 
         </div>
-        {isSubmitted ? window.history.pushState("", "", "/Dashboard") : renderForm}
+        {isSubmitted ? window.history.pushState("", "", "/BookingList") : renderForm}
         <p className="center">{(wrongLogin)}</p>
       </div>
     </div>

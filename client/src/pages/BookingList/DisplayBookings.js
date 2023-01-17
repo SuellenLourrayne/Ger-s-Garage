@@ -30,7 +30,7 @@ export default function DisplayBooking(props) {
     //get user info
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const [idUserLogged, setIdUserLogged] = useState(params.get("u"));
+    const idUserLogged = params.get("u");
     const [idUserLoggedTrust, setIdUserLoogedtrust] = useState("");
 
     const getInfo = () => {
@@ -50,40 +50,16 @@ export default function DisplayBooking(props) {
     }, [params]);    
 
     //constants to create or update users
-    const [idClient, setIdClient] = useState("");
     const [idStaff, setIdStaff] = useState("");
-    const [staffName, setStaffName] = useState("");
-    const [staff, setStaff] = useState("");
-    const [idUserTrust, setIdUserTrust] = useState("");
     const [idBooking, setIdBooking] = useState("");
-    const [name, setName] = useState("");
-    const [bookingType, setBookingType] = useState("");
-    const [date, setDate] = useState("");
-    const [time, setTime] = useState("");
-    const [license, setLicense] = useState("");
     const [status, setStatus] = useState("");
-    const [coments, setComents] = useState("");
-    const [vehicle, setVehicle] = useState("");
-    const [engine, setEngine] = useState("");
-    const [brand, setTiBrand] = useState("");
+    const [open, setOpen] = useState('0');
 
     //clean constants 
     function clean (){
-        setIdClient("");
         setIdStaff("");
-        setStaffName("");
-        setIdUserTrust("");
         setIdBooking("");
-        setName("");
-        setBookingType("");
-        setDate("");
-        setTime("");
-        setLicense("");
         setStatus("");
-        setComents("");
-        setVehicle("");
-        setEngine("");
-        setTiBrand("");
     }
     
     //update user function
@@ -108,9 +84,6 @@ export default function DisplayBooking(props) {
         })
         .catch(error => console.error(`Error: ${error}`));
     };
-
-    const [open, setOpen] = useState('0');
-    const [statusEdit, setStatusEdit] = useState(true);
     
     const toggle = (id) => {
         if (open === id) {

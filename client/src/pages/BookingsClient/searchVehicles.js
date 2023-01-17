@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
-import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import {
     Accordion,
     AccordionBody,
@@ -12,7 +12,6 @@ import {
     Label,
     Input,
     Button,
-    InputGroup,
   } from 'reactstrap';
   import SearchBrands from "./searchBrands";
 
@@ -24,11 +23,6 @@ import {
     const updateActiveElement = (id) => {
         setActiveElement(activeElement !== id ? id : -1);
     }
-
-    //get user info
-    const location = useLocation();
-    const params = new URLSearchParams(location.search);
-    const [idUserLogged, setIdUserLogged] = useState(params.get("u"));
 
     //constants to create or update users
     const [idVehicleDetail, setIdVehicleDetail] = useState("");

@@ -13,7 +13,7 @@ function BookingList () {
     //get user info
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const [idUser, setIdUser] = useState(params.get("u"));
+    const idUser = params.get("u");
     const [idUserTrust, setIdUsertrust] = useState("");
     const [name, setName] = useState("");
 
@@ -31,7 +31,7 @@ function BookingList () {
 
     const getBooking = async () => {
         //Administrator [view all bookings]
-        if(idUserTrust == 1){
+        if(idUserTrust === 1){
             const booking = await Axios.post('http://localhost:3002/api/Bookings', { idUser: "", idUserTrust: idUserTrust, idStaff: "" }).then((response) => {
             const fullData = response.data;
             setList(fullData);
@@ -43,7 +43,7 @@ function BookingList () {
         }
 
         //Staff [view bookings allocated to them]
-        else if(idUserTrust == 2){
+        else if(idUserTrust === 2){
             const booking = await Axios.post('http://localhost:3002/api/Bookings', { idUser: "", idUserTrust: idUserTrust, idStaff: idUser }).then((response) => {
             const fullData = response.data;
             setList(fullData);
@@ -54,7 +54,7 @@ function BookingList () {
             setList(booking.data.results);
         }
         //Client [view bookings made by them]
-        else if(idUserTrust == 3){
+        else if(idUserTrust === 3){
             const booking = await Axios.post('http://localhost:3002/api/Bookings', { idUser: idUser, idUserTrust: idUserTrust, idStaff: "" }).then((response) => {
             const fullData = response.data;
             setList(fullData);

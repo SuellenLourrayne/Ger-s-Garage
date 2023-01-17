@@ -70,31 +70,36 @@ app.post('/api/UpdateUser', (req, res)=> {
   const name = req.body.name;
   const email = req.body.email;
   const phone = req.body.phone;
+  const password = req.body.password;
 
-  console.log(idUser+","+name+","+email+","+phone);
+  console.log(idUser+","+name+","+email+","+phone+","+password);
 
-  let sqlInsert = "UPDATE users SET ";
+  let sqlUpdate = "UPDATE users SET ";
   let count = 0;
 
   if(name !== "") {
-    sqlInsert += "name = '"+ name +"'";
+    sqlUpdate += "name = '"+ name +"'";
     count++;
   }
   if(email !== "") {
-    if(count>0) sqlInsert += ", ";
-    sqlInsert += "email = '"+ email +"'";
+    if(count>0) sqlUpdate += ", ";
+    sqlUpdate += "email = '"+ email +"'";
     count++;
   }
   if(phone !== "") {
-    if(count>0) sqlInsert += ", ";
-    sqlInsert += "phone = '"+ phone +"'";
+    if(count>0) sqlUpdate += ", ";
+    sqlUpdate += "phone = '"+ phone +"'";
+  }
+  if(password !== "") {
+    if(count>0) sqlUpdate += ", ";
+    sqlUpdate += "password = '"+ password +"'";
   }
 
-  sqlInsert += " WHERE users.idUser = ?";
+  sqlUpdate += " WHERE users.idUser = ?";
   
-  console.log(sqlInsert);
+  console.log(sqlUpdate);
   
-  db.query(sqlInsert, [idUser], (err, result)=> {
+  db.query(sqlUpdate, [idUser], (err, result)=> {
     console.log(result);
   });
 });

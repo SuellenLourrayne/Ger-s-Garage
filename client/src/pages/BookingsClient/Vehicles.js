@@ -25,7 +25,7 @@ export default function Vehicle() {
     //get user info
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const [idUserLogged, setIdUserLogged] = useState(params.get("u"));
+    const idUserLogged = params.get("u");
 
     //show or hide modal
     const [show, setShow] = useState(false);

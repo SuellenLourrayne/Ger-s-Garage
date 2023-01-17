@@ -1,7 +1,7 @@
 import React, {useEffect,useState} from "react";
 import { useLocation } from 'react-router-dom';
 import Axios from 'axios';
-import { BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
+import { BrowserRouter as Router  } from 'react-router-dom';
 import Vehicle from "./Vehicles"
 import {Row,
         Col,
@@ -10,19 +10,11 @@ import {Row,
         Nav,
         TabContent,
         TabPane,
-        Card,
-        CardTitle,
-        CardText,
         Button,
         FormGroup,
         Input,
         Label,
         InputGroup,
-        Accordion,
-        AccordionItem,
-        AccordionHeader,
-        AccordionBody,
-
         } from "reactstrap"
 
 import SideBar from '../../components/Sidebar';
@@ -54,7 +46,7 @@ function BookingsClient () {
     //get user info
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const [idUser, setIdUser] = useState(params.get("u"));
+    const idUser = params.get("u");
     const [idUserTrust, setIdUsertrust] = useState("");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -70,7 +62,7 @@ function BookingsClient () {
                 setIdUsertrust(response.data[0].idUserTrust);
                 setName(response.data[0].name);
                 setEmail(response.data[0].email);
-                setPassword(response.data[0].password);
+                setPhone(response.data[0].phone);
             }
         })
         .catch(error => console.error(`Error: ${error}`));
@@ -91,6 +83,19 @@ function BookingsClient () {
             time: time,
             coments: coments,
         }).then(alert("Booking Created."),window.location.reload(true));
+
+        clean();
+    };
+
+    //update profile function
+    const HandleSubmitUpdate = (event) => {
+        Axios.post('http://localhost:3002/api/UpdateUser', {
+            idUser: idUser,
+            name: name,
+            email: email,
+            phone: phone,
+            password: password,
+        }).then(setEditProfile(!editProfile),alert("Profile Updated."));
 
         clean();
     };
@@ -140,7 +145,7 @@ function BookingsClient () {
                             <Nav tabs>
                                 <NavItem className="linkNames">
                                 <NavLink
-                                    active={tab == "1"? (true) : (false)}
+                                    active={tab === "1"? (true) : (false)}
                                     onClick={() => setTab("1")}
                                 >
                                     <h3>New Booking</h3>
@@ -150,7 +155,7 @@ function BookingsClient () {
                                 </NavItem>
                                 <NavItem className="linkNames">
                                 <NavLink
-                                    active={tab == "2"? (true) : (false)}
+                                    active={tab === "2"? (true) : (false)}
                                     onClick={() => setTab("2")}
                                 >
                                     <h3>Vehicles</h3>
@@ -297,9 +302,9 @@ function BookingsClient () {
                                             id="name"
                                             name="name"
                                             type="textArea"
-                                            placeholder="Dark Sabrina"
                                             disabled={editProfile}
                                             defaultValue={name}
+                                            onChange={(e)=> { setName(e.target.value) }}
                                             />
                                             </FormGroup>
                                             <FormGroup>
@@ -310,9 +315,9 @@ function BookingsClient () {
                                             id="email"
                                             name="emal"
                                             type="textArea"
-                                            placeholder="darksabrina@gmail.com"
                                             disabled={editProfile}
                                             defaultValue={email}
+                                            onChange={(e)=> { setEmail(e.target.value) }}
                                             />
                                             </FormGroup>
                                             <FormGroup>
@@ -323,9 +328,9 @@ function BookingsClient () {
                                             id="phone"
                                             name="phone"
                                             type="textArea"
-                                            placeholder="4002-8922"
                                             disabled={editProfile}
                                             defaultValue={phone}
+                                            onChange={(e)=> { setPhone(e.target.value) }}
                                             />
                                             </FormGroup>
                                             <FormGroup>
@@ -338,11 +343,11 @@ function BookingsClient () {
                                             type="textArea"
                                             placeholder="********"
                                             disabled={editProfile}
-                                            
+                                            onChange={(e)=> { setPassword(e.target.value) }}                                            
                                             />
                                             </FormGroup>
                                             {editProfile? (<Button color="info" onClick={() => setEditProfile(!editProfile)}>Edit</Button>) :
-                                            (<Button color="success" onClick={() => setEditProfile(!editProfile)}>Save</Button>)}
+                                            (<Button color="success" onClick={HandleSubmitUpdate} >Save</Button>)}
                                         </div>
                                     </div>
                                 </div>

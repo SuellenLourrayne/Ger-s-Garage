@@ -19,7 +19,7 @@ const SideBarItem = ({ item, active }) => {
     //verify user trust level
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const [idUser, setIdUser] = useState(params.get("u"));
+    const idUser = params.get("u");
     const [idUserTrust, setIdUsertrust] = useState("");
 
     useEffect(() => {

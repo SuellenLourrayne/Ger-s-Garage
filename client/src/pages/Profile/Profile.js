@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import Axios from 'axios';
-import { BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation  } from 'react-router-dom';
 import {Row,
   Col,
   NavItem,
@@ -23,8 +23,10 @@ import './Profile.css';
 function Profile () {
     const [editProfile, setEditProfile] = useState(true);
   
-    //constants to update user
-    const [idUser, setIdUser] = useState("");
+    //constants to update user & get user info
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const idUser = params.get("u");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
@@ -32,12 +34,25 @@ function Profile () {
 
     //clean constants after updated
     function clean (){
-      setIdUser("");
       setName("");
       setEmail("");
       setPhone("");
       setPassword("");
     }
+
+    const getInfo = () => {
+        Axios.post('http://localhost:3002/api/Users', { idUser: idUser, idUserTrust: "" }).then((response) => {
+            if(response.data.message)
+                console.log(response.data.message);
+            else {
+                setName(response.data[0].name);
+                setEmail(response.data[0].email);
+                setPhone(response.data[0].phone);
+                setPassword(response.data[0].password);
+            }
+        })
+        .catch(error => console.error(`Error: ${error}`));
+    };
 
     //update user function
     const HandleSubmitUpdate = (event) => {
@@ -57,6 +72,10 @@ function Profile () {
     const updateActiveElement = (id) => {
         setActiveElement(activeElement !== id ? id : -1);
     }
+
+    useEffect(() => {
+      getInfo();
+  }, [name]);   
 
   return(
     <Router>

@@ -238,7 +238,7 @@ export default function DisplayBooking(props) {
                                             onChange={(e)=> { onChangeHandlerStaff(e); setIdBooking(e.target.id) }}
                                             defaultValue={booking.staffName}
                                             >
-                                                <option id="0" >
+                                                <option id="1" >
                                                     None
                                                 </option>
                                             <DisplayStaff list={list2} /> 

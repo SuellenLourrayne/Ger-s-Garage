@@ -205,7 +205,7 @@ app.post('/api/Bookings', (req, res)=> {
   }
 
   sqlSelect += " ORDER BY bookings.date";
-  console.log(sqlSelect);
+  //console.log(sqlSelect);
 
   db.query(sqlSelect, [ ], (err, result)=> {
     if (err) {console.log(err)}
@@ -272,7 +272,7 @@ app.get('/api/Brands', (req, res)=> {
 
   db.query(sqlSelect, [ ], (err, result)=> {
     if (err) {console.log(err)}
-    else if (result.length > 0) {res.send(result),console.log(result)}
+    else if (result.length > 0) {res.send(result)}
     else {console.log("No brand found.");res.send({message: "There is no brand registered."})};
   });
 });
@@ -288,7 +288,7 @@ app.post('/api/Vehicles', (req, res)=> {
   + " INNER JOIN enginetypes AS e ON v.idEngineType = e.idEngineType "
   + " INNER JOIN brands AS b ON v.idBrand = b.idBrand "
   + " WHERE idUser = ?";
-  console.log(sqlSelect);
+  //console.log(sqlSelect);
 
   db.query(sqlSelect, [ idUser ], (err, result)=> {
     if (err) {console.log(err)}
@@ -353,11 +353,13 @@ app.post('/api/NewBooking', (req, res)=> {
   const idBookingType = req.body.idBookingType;
   const date = req.body.date;
   const time = req.body.time;
-  const coments = req.body.coments;
+  let coments = req.body.coments;
+
+  if(coments === "") coments = "No coments.";
 
   console.log(idClient+","+idVehicleDetail+","+idBookingType+","+date+","+time+","+coments);
 
-  const sqlInsert = "INSERT INTO bookings(idClient, idVehicleDetail, idBookingType, date, time, coments) VALUES (?, ?, ?, ?, ?, ?)";
+  const sqlInsert = "INSERT INTO bookings(idClient, idVehicleDetail, idBookingType, date, time, coments) VALUES ( ?, ?, ?, ?, ?, ?)";
   console.log(sqlInsert);
 
   db.query(sqlInsert, [ idClient, idVehicleDetail, idBookingType, date, time, coments], (err, result)=> {

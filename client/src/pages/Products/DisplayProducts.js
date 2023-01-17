@@ -199,7 +199,7 @@ export default function DisplayProducts(props) {
                                 </ModalBody>
                                 <ModalFooter>
                                     <Button color="primary" onClick={HandleSubmitNew} >Save</Button>
-                                    <Button color="secondary" >
+                                    <Button color="secondary" onClick={handleClose} >
                                         Cancel
                                     </Button>
                                 </ModalFooter>

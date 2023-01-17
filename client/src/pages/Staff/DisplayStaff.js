@@ -51,6 +51,7 @@ export default function DisplayStaff(props) {
         name: name,
         email: email,
         phone: phone,
+        password: "",
     }).then(alert("Staff updated."),updateActiveElement(-1));
 
     clean();

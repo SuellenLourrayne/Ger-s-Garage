@@ -28,7 +28,7 @@ export default function DisplayClient(props) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    //constants to create or update users
+    //constants to create or update user
     const [idUser, setIdUser] = useState("");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -51,6 +51,7 @@ export default function DisplayClient(props) {
         name: name,
         email: email,
         phone: phone,
+        password: "",
     }).then(alert("Client updated."),updateActiveElement(-1));
 
     clean();
